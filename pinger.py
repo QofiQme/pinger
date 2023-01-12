@@ -1,10 +1,17 @@
-import ping3
+import os
+import time
+import socket
+import ctypes
 
-ip_address = input("Enter the IP address to ping: ")
 while True:
-    response = ping3.ping(ip_address)
-    if response is not None:
+    url_or_ip = input("Enter the URL or IP address to ping: ")
+    try:
+        ip_address = socket.gethostbyname(url_or_ip)
+    except socket.gaierror:
+        ip_address = url_or_ip
+    response = os.system("ping -t " + ip_address)
+    if response == 0:
         print(ip_address, 'is up!')
     else:
-        print(ip_address, 'is down.')
+        ctypes.windll.user32.MessageBoxW(0, f"{ip_address} is down", "Ping Result", 0)
     time.sleep(1)
